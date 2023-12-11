@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -15,6 +16,7 @@ import pe.edu.idat.appidatpatitas.bd.entity.Persona;
 import pe.edu.idat.appidatpatitas.databinding.ActivityMainBinding;
 import pe.edu.idat.appidatpatitas.retrofit.request.LoginRequest;
 import pe.edu.idat.appidatpatitas.retrofit.response.LoginResponse;
+import pe.edu.idat.appidatpatitas.util.SharePreferencesManager;
 import pe.edu.idat.appidatpatitas.viewmodel.AuthViewModel;
 import pe.edu.idat.appidatpatitas.viewmodel.PersonaViewModel;
 
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity
             nuevaPersona.setEmail(loginResponse.getEmail());
             nuevaPersona.setEsvoluntario(loginResponse.getEsvoluntario());
             personaViewModel.insertarPersona(nuevaPersona);
+            SharePreferencesManager.setBooleanValue("guardar clave", true);
         }else{
             Snackbar.make(binding.getRoot(), loginResponse.getMensaje(),
                     Snackbar.LENGTH_LONG).show();

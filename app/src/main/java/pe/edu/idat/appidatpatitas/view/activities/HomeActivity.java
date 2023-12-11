@@ -1,6 +1,10 @@
 package pe.edu.idat.appidatpatitas.view.activities;
 
+import static pe.edu.idat.appidatpatitas.util.SharePreferencesManager.getBooleanValue;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
@@ -8,6 +12,7 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -20,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import pe.edu.idat.appidatpatitas.R;
 import pe.edu.idat.appidatpatitas.bd.entity.Persona;
 import pe.edu.idat.appidatpatitas.databinding.ActivityHomeBinding;
+import pe.edu.idat.appidatpatitas.util.SharePreferencesManager;
 import pe.edu.idat.appidatpatitas.viewmodel.PersonaViewModel;
 
 public class HomeActivity extends AppCompatActivity {
@@ -37,7 +43,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         personaViewModel = new ViewModelProvider(this)
                 .get(PersonaViewModel.class);
-        setSupportActionBar(binding.appBarHome.toolbar);
+        setSupportActionBar(binding.appBarHome.tlbmenu);
         binding.appBarHome.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,11 +88,26 @@ public class HomeActivity extends AppCompatActivity {
                 new Observer<Persona>() {
                     @Override
                     public void onChanged(Persona persona) {
+                        boolean guardarclave = SharePreferencesManager.getBooleanValue("guardarclave");
                         tvnomusuario.setText(persona.getNombres()+
                                 " "+persona.getApellidos());
-                        tvemailusuario.setText(persona.getEmail());
+                        tvemailusuario.setText(persona.getEmail() + " - "
+                            +guardarclave);
                     }
                 }
         );
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.action_cerrar){
+            personaViewModel.eliminarPersona();
+            startActivity(new Intent(
+                    getApplicationContext(),
+                    MainActivity.class
+            ));
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

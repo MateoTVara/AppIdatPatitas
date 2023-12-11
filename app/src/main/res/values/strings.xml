@@ -19,4 +19,5 @@
     <string name="valingresar">INGRESAR</string>
     <string name="valpassword">PASSWORD</string>
     <string name="valregistro">REGISTRARSE</string>
+    <string name="action_cerrar">Cerrar Sesión</string>
 </resources>
